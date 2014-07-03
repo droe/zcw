@@ -59,18 +59,12 @@ string get_countryname(string tld) {
 tld=php_strtoupper(tld);
 EOF
 
-wget -qO - http://www.iana.org/domains/root/db/index.html | grep country-code | grep -v such.as | cut -f3- -d"." | sed 's/<\/a><\/td><td>country-code<\/td><td>/|/g' | cut -f-1 -d"<" | cut -f-1 -d"(" | while read line; do
+lynx -dump http://www.iana.org/domains/root/db | egrep "\.[a-z]+ country-code" | sed 's/^.*]\.//' | while read line; do
 
-country=`echo $line | cut -f2 -d"|"`
-comma=`echo $country | cut -f2 -d","`
-cctld=`echo $line | cut -f1 -d"|"`
+cctld=`echo "$line" | sed 's/ country-code.*$//' | tr '[:lower:]' '[:upper:]'`
+country=`echo "$line" | sed 's/^.* country-code //'`
 
-if [ "x$comma" = "x$country" ]; then
-	echo 'if(tld=="'$cctld'") return "'$country'";' >> $INCPATH"cctld.hpp.new"
-else
-	zx=`echo $country | cut -f1 -d","`
-	echo 'if(tld=="'$cctld'") return "'`echo $comma` $zx'";' >> $INCPATH"cctld.hpp.new"
-fi
+echo 'if(tld=="'$cctld'") return "'$country'";' >> $INCPATH"cctld.hpp.new"
 
 done
 
@@ -111,7 +105,7 @@ cat << EOF > $INCPATH"gtld.hpp.new"
 bool is_gtld(string str) {
 EOF
 
-live=`wget -qO - http://www.iana.org/domains/root/db/index.html | egrep "sponsored|generic" | grep -v such.as | cut -f3- -d"." | cut -f-1 -d"<" | cut -f-1 -d"(" | xargs | sed 's/ /|/g'`
+live=`lynx -dump http://www.iana.org/domains/root/db | egrep "\.[a-z]+ (sponsored|generic)" | sed 's/^.*]\.//' | awk '{print $1}' | tr '[:lower:]' '[:upper:]' | xargs | sed 's/ /|/g'`
 
 gtld='string needle="'$live'";'
 
