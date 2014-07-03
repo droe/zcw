@@ -1,0 +1,108 @@
+
+/*
+
+ INSTALL
+   
+   Copyright (c) 2003-2008 by Philippe Bourcier
+   
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2, or (at your option)
+   any later version.
+   
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+   
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software Foundation,
+   Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+*/
+
+This document covers the installation procedure for zcw.
+
+
+Compiling
+---------
+
+Edit the Makefile if needed (install path...).
+
+Type "make tld" to update the TLD include files (needs to
+be done before compiling). This operation can take up to
+one minute or two...
+
+Type "make cache" and "make sqlite" in this directory to
+compile zcw with support for caching into a sqlite db
+(much faster). You need to have sqlite version 3.x installed
+in order for zcw to compile with this feature enabled.
+
+# Sqlite is a simple network/passwordless database system.
+# More infos on sqlite : http://www.sqlite.org/
+#
+# Compile sqlite3 with configure options : --disable-tcl --enable-tempstore
+# A script (create_db.sh) will also download parts (less than
+# 1 Mb) of the ARIN database to your computer (ARIN_cache.db).
+#
+# or easier :
+#
+# debian/ubuntu : apt-get install sqlite3 libsqlite3-dev bc
+# redhat/centos : yum install sqlite sqlite-devel
+#
+
+Type "make mta" to compile the sqlite / mta version
+
+Type "make sqlite-spam" to compile the sqlite version optimized for spam reports
+It should work, but it might give worst results than the classic version in some cases
+
+Type "make classic" in this directory to compile the classic
+version of zcw (ie: no cache).
+
+Type "make server" in this directory to compile the
+server version of zcw (to make a whois server).
+The server needs the sqlite3 library and binaries to run.
+Don't forget to chown nobody the folder in which you have
+the sqlite databases installed. Default path is:
+/usr/local/share/zcw
+
+Then type "make install" (as root) and "rehash" if you use
+a *sh shell.
+
+To use zcw, simply type "zcw" and follow the
+instructions...
+
+
+Compiling Issues
+----------------
+
+ + ZCW should work under any *nix with a recent gcc
+   (version 2.9x or newer (3.x/4.x)).
+
+ + Getting other errors...
+
+   Contact me to report bugs.
+   e-mail : philippe[at]cyberabuse.org
+
+
+Requirements   
+------------
+
+To build zcw, you need : g++, grep, sed, cat, tr, uname, strip,
+xargs, awk, tr, wc, wget, etc...
+To build tcpserver (make server), you need : wget, tar, head,
+tail, patch.
+To build zcw with cache, you need : sqlite 3.x
+Don't forget to install binaries, includes and library if you
+are using packages (ie: lib*, *-devel or *-dev, *-bin in pkg name)
+
+This software has been successfully tested on the following OS/systems :
+- Linux/x86 with gcc 2+
+- Linux/Alpha with gcc 2+
+- FreeBSD/x86 with gcc 2+
+- MacOS with gcc 2+ (G4 and G5)
+- Solaris/UltraSPARC with gcc 3+
+
+If you have any compatibility issues, drop me a mail :
+philippe[-at-]cyberabuse.org
+

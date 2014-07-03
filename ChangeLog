@@ -1,0 +1,166 @@
+
+/*
+
+ ChangeLog
+   
+   Copyright (c) 2003-2008 by Philippe Bourcier
+   
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2, or (at your option)
+   any later version.
+   
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+   
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software Foundation,
+   Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+*/
+
+ * ZCW 5.6 (19/10/2009)
+ - fix tcpserver compilation script (Peter Landbo)
+ - fix a bug in JPNIC email parsing (OCN)
+ - fixed compilation on debian/ubuntu
+
+
+ * ZCW 5.5 (13/07/2008)
+
+ - fix Makefile for Win32
+ - gcc 2 compat issue
+ - get rid of that lame and big ascii art
+ - default TLDs libs have been updated
+ - TLD includes generator has been updated
+ - removed support for sqlite 2.x, upgrade to 3.x
+ - fixed a small bug in the ARIN cache system
+ - fixed typo in INSTALL file for "make server"
+ - added better checks for netname and inetnum for KRNIC (Reported by Jim Rather/USinternetworking and Sean Casey/SCaseyLLC.com)
+ - various improvment for LACNIC (Reported by Andrew Perron/EWA-Canada)
+ - added "make mta" for those who use zcw to add abuse headers at the MTA level (though that's not such a good idea...) (Sebastien Gross's idea)
+ - added "make sqlite-spam" for those who use zcw to report spam (zcw was made to report abuse/security issues)
+ - make strstr case insensitive when the searched string is lowercase
+
+
+ * ZCW 5.4 (01/10/2006) 
+
+ - fixed a bug in update code
+ - fixed a bug in create_db.sh which had serious impacts (wrong results) when using sqlite (Reported by Abraham Kuo/arizona.edu)
+
+
+ * ZCW 5.3 (02/07/2006)
+
+ - new sqlite/sqlite3 cache system for ARIN (big thanks to David R Huberman/ARIN)
+ - now the source is in a separate folder, with scripts and cache in subfolders
+ - new Makefile (still no ./configure needed)
+ - fixed a bug in Makefile when strip was not installed
+ - fixed a bug for JPNIC mail entries [e-mail field title changed]
+ - fixed a bug with sqlite3 table creation which impacted SELECT queries (INTEGER mandatory, sqlite3 sux ?)
+ - make win32, the return... building with sqlite3 under cygwin needed a few tweeks
+ - get the [Abuse] object in JPNIC (Reported by Johannes Knaupp)
+
+
+ * ZCW 5.2 (05/06/2006)
+
+ - script for automatic update of CCTLD list (Reported by Andrew Perron/EWA-Canada)
+ - script and new include file for automatic update of GTLD list
+ - merging those two scripts in make_tld.sh and modified Makefile to exec it before compiling zcw
+ - modified Makefile and tcpserver.sh so it won't use ls -laF anymore (its output varying too much between OS's)
+ - fixed bug in ARIN parser [due to new objects name] (Reported by Mrten/ii.nl - John Becker/cornell.edu - David R Huberman/ARIN)
+ - fixed KRNIC parser (English text moved at the end of output)
+ - switched routeserver from netlantis to whois.cymru.com (so the +a flag will work now)
+ - fixed a bug in RIPE IRT object parser
+ - changed behavior for second level queries (objects/more specific) to RIPE (-r instead of -B)
+
+
+ * ZCW 5.1 (27/10/2005)
+
+ - fixed KRNIC network range
+ - fixed parser to catch AFRINIC networks transfered by RIPE (Reported by Andrew Perron/EWA-Canada)
+
+
+ * ZCW 5.0 (23/10/2005)
+
+ - fixed APNIC output parser (invalid TLDs) (Reported by Andrew Perron/EWA-Canada)
+ - removed BRNIC queries, BRNIC merged their data in LACNIC (Reported by Andrew Perron/EWA-Canada)
+ - added support for V6NIC whois
+ - fixed a bug when ARIN has multiple entries for one netblock name (Reported by Andrew Perron/EWA-Canada)
+ - added support for abuse-mailbox RIPE object
+ - optimized RIPE db email parsing routine
+ - fixed RIPE : added the -B flag
+ - added support for AFRINIC
+ - lynx no more needed to build tcpserver (...only wget is needed) (Teuk/teuk.org)
+ - compiles on Solaris/sparc (Thanks to Jon Ross)
+ - tested under Mac OS X on G4 and G5 CPUs (mbuna/bugged.org)
+ - tested under Solaris 7+ on a Sun/ultrasparc (Jon Ross)
+ - fixed a bug with JPNIC whois (ignore "Less Specific Info." fields)
+ - fixed a bug in RIPE netname parsing
+
+
+ * ZCW 4.9 (06/02/2005)
+
+ - fixed tcpserver.sh for Cygwin (win32) and FreeBSD
+ - correct int vs u_long bugs in network functions (some JPNIC results were empty because of this)
+ - fixed warnings during "make debug"
+ - removed "make win32" (now useless, just use make)
+
+
+ * ZCW 4.8 (11/10/2004)
+
+ - fixed a bug in LACNIC whois parsing (Andrew Perron/EWA-Canada)
+ - fixed a bug in JPNIC "network numbers" (Jens Cameron/Datainnovation i Lund AB)
+ - fixed a bug for KR networks only present in APNIC db (Jim Rather/USinternetworking)
+ - fixed a bug in TWNIC abuse-contact parsing
+ - fixed tcpserver.sh and added a patch for it
+ - modified the INSTALL file to add "-i 3" to the tcpserver flags to allow only 3 simultaneous connections max from a unique host
+ - fixed a bug in "Announced by" parsing system (the routeserver is down atm)
+
+
+ * ZCW 4.7 (02/05/2004)
+
+ - fixed a bug in KRNIC abuse-contact parsing (Jack L Bauder)
+ - fixed a bug in KRNIC whois parsing (Jack L Bauder)
+ - fixed a bug in the getmail() function (e-mails between simple quotes not caught!)
+
+
+ * ZCW 4.6 (25/01/2004)
+
+ - fixed a bug in the ARIN multiple OrgName match & ARIN multiple OrgName parser code (Paul Grieggs/iup.edu)
+ - added AdminEmail to the list of fields searched in the ARIN db (if no Abuse POC is found, obviously)
+ - fixed a bug in the "Announced by" system
+ - created a "make debug" so anyone can see which queries are sent to the whois servers
+ - created a "make win32" for cygwin users
+
+
+ * ZCW 4.5 (14/12/2003)
+
+ - get the email correctly if it starts with ":"
+ - optimise HTTP headers removal system
+ - removed /h option (use | grep -v "^% " if you don't want the headers)
+ - get the email from the RIPE IRT object if present (RIPE)
+
+
+ * ZCW 4.4 (28/06/2003)
+
+ - get the email correctly if it's enclosed by "'s (Ayanshola)
+ - clean email starting with a " " because of two following spaces (Teuk)
+ - corrected a bug related to the bad handling of multiple " " while searching for emails in strings (Jamie Gillespie/AusCERT)
+ - catch abuse emails like abuse-team@ (Ayanshola)
+ - repaired the "Announced by" system
+ - added a 25 seconds timeout in the remote whois query function
+
+
+ * ZCW 4.3
+
+ - emails ending with a ";" or "," are now handled correctly (csirt.dk)
+ - emails between "<>" are now handled correctly (Miquel van Smoorenburg)
+ - a bug with inet_aton/inet_ntoa has been corrected (Gaston De Sloover)
+ - ARIN AbuseHandle object better handled (princeton.edu's abuse team)
+
+
+ * ZCW 4.0
+
+ - PHP shell script -> C++
+
